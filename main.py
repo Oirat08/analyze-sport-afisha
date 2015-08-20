@@ -10,6 +10,15 @@ from collections import namedtuple
 
 import pandas as pd
 
+import seaborn as sns
+sns.set_style("whitegrid")
+
+from matplotlib import pyplot as plt
+from matplotlib import rc
+# For cyrillic labels
+rc('font', family='Verdana', weight='normal')
+
+
 AFISHA_DIR = 'data'
 STAR = '*'
 NL = '\n'
@@ -93,7 +102,7 @@ def parse_event_description(token):
 
 
 Participants = namedtuple('Participants', 'description, number')
-Event = namedtuple('Event', ['section', 'title',
+Event = namedtuple('Event', ['section', 'subsection', 'title',
                              'start', 'stop',
                              'description', 'address', 'participants'])
 
@@ -187,9 +196,9 @@ def parse_tokens(tokens):
         else:
             address3 = None
         address = join_address(address1, address2, address3)
+        main, subsection = section
         yield Event(
-            section,
-            title,
+            main, subsection, title,
             start, stop,
             event_description,
             address,
@@ -205,3 +214,20 @@ def parse_afishas(dir=AFISHA_DIR):
     for path in list_afishas(dir=dir):
         for event in parse_afisha(path):
             yield event
+
+
+def make_table(events):
+    data = [
+        (_.section, _.subsection,
+         _.title, _.description,
+         _.start, _.stop,
+         _.address, _.participants.number)
+        for _ in events
+    ]
+    return pd.DataFrame(
+        data,
+        columns=['section', 'subsection',
+                 'title', 'description',
+                 'start', 'stop',
+                 'address', 'participants']
+    )
