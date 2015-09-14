@@ -20,6 +20,7 @@ rc('font', family='Verdana', weight='normal')
 
 
 AFISHA_DIR = 'data'
+RAW_DATA = 'data.csv'
 STAR = '*'
 NL = '\n'
 CANCELED = u'Отменен'
@@ -231,3 +232,11 @@ def make_table(events):
                  'start', 'stop',
                  'address', 'participants']
     )
+
+
+def dump_table(table, path=RAW_DATA):
+    table.to_csv(path, encoding='utf8', index=False)
+
+
+def load_table(path=RAW_DATA):
+    return pd.read_csv(path)
