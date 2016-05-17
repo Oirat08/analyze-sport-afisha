@@ -13,6 +13,7 @@ import pandas as pd
 import seaborn as sns
 sns.set_style("whitegrid")
 
+import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib import rc
 # For cyrillic labels
